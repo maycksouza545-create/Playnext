@@ -466,4 +466,72 @@ function openGame(type) {
     secret = Math.floor(Math.random() * 100) + 1; attempts = 0;
     body.innerHTML = '<p class="game-instruction">Escolhi um número entre 1 e 100. Descubra qual é!</p>' +
       '<input id="guess" class="game-input" type="number" min="1" max="100" placeholder="1–100" aria-label="Seu palpite">' +
-      '<button class="play" id="guessBtn" sty
+      '<button class="play" id="guessBtn" style="width:auto">Tentar</button>' +
+      '<p id="attemptCounter" class="game-instruction">Tentativas: 0</p>';
+    $("guessBtn").onclick = () => {
+      const n = Number($("guess").value);
+      if (!Number.isInteger(n) || n < 1 || n > 100) {
+        $("result").textContent = "Digite um número válido entre 1 e 100!"; playSound("wrong"); return;
+      }
+      attempts++; $("attemptCounter").textContent = "Tentativas: " + attempts;
+      if (n === secret) {
+        const best = saveRecord("numero", attempts);
+        $("result").textContent = best ? "🏆 Novo recorde! Você acertou em " + attempts + " tentativa(s)!" : "🎉 Acertou em " + attempts + " tentativa(s)!";
+        playSound("win");
+      } else {
+        $("result").textContent = n < secret ? "⬆️ Tente um número maior!" : "⬇️ Tente um número menor!";
+        playSound("wrong");
+      }
+      $("guess").focus();
+    };
+    $("guess").addEventListener("keydown", e => { if (e.key === "Enter") $("guessBtn").click(); });
+    $("game").scrollIntoView({behavior:"smooth", block:"start"});
+    return;
+  }
+
+  $("gameTitle").textContent = "⚡ Teste de Reflexo";
+  body.innerHTML = '<p id="reactionMsg" class="game-instruction">Toque para iniciar. Aguarde o verde!</p>' +
+    '<button id="reactionBtn" style="background:#7044d8;color:white;font-size:18px;min-height:120px;width:100%;max-width:440px">INICIAR</button>';
+  const btn = $("reactionBtn");
+  btn.onclick = () => {
+    if (!waiting && !startedAt) {
+      playSound("tick"); waiting = true; btn.textContent = "AGUARDE..."; btn.style.background = "#b45309";
+      $("reactionMsg").textContent = "Não toque ainda! Espere o verde.";
+      round++; const thisRound = round;
+      reactionTimer = setTimeout(() => {
+        if (thisRound !== round) return;
+        waiting = false; startedAt = Date.now(); btn.style.background = "#16a34a";
+        btn.textContent = "TOQUE AGORA!"; $("reactionMsg").textContent = "AGORA!";
+        playSound("go");
+      }, 1500 + Math.random() * 2500);
+    } else if (waiting) {
+      clearTimeout(reactionTimer); round++; waiting = false;
+      btn.style.background = "#7044d8"; btn.textContent = "TENTAR NOVAMENTE";
+      $("reactionMsg").textContent = "Cedo demais! Tente de novo."; playSound("wrong");
+    } else if (startedAt) {
+      const elapsed = Date.now() - startedAt; startedAt = 0;
+      const best = saveRecord("reflexo", elapsed);
+      btn.style.background = "#7044d8"; btn.textContent = "JOGAR DE NOVO";
+      $("reactionMsg").textContent = "Sua velocidade:";
+      $("result").textContent = best ? "🏆 Novo recorde: " + elapsed + " milissegundos!" : elapsed + " milissegundos!";
+      playSound("win");
+    }
+  };
+  $("game").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function closeGame(hide = true) {
+  clearTimeout(reactionTimer); round++; waiting = false; startedAt = 0; locked = false;
+  if (hide) {
+    $("game").classList.add("hidden");
+    document.body.classList.remove("playing");
+    activeGame = "";
+    window.scrollTo({top:0, behavior:"smooth"});
+    playSound("click");
+  }
+  $("gameBody").innerHTML = ""; $("result").textContent = "";
+}
+refreshRecords();
+</script>
+</body>
+</html>
