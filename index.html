@@ -1,183 +1,262 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#101020">
+<meta name="theme-color" content="#050b1b">
 <title>PlayNexo — Jogos Online</title>
 <style>
 :root {
-  --bg: #101020;
-  --panel: #1b1b30;
-  --purple: #8b5cf6;
-  --cyan: #22d3ee;
-  --text: #f5f5ff;
-  --muted: #b3b3ca;
+  --bg: #050b1b;
+  --panel: #081632;
+  --panel2: #0d2044;
+  --purple: #7c3aed;
+  --blue: #087cff;
+  --cyan: #16d9ff;
+  --text: #f5f8ff;
+  --muted: #b7c7e8;
+  --border: #173568;
 }
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
   margin: 0;
-  background: var(--bg);
+  background:
+    radial-gradient(ellipse at 50% -15%, rgba(22, 91, 200, .22), transparent 55%),
+    var(--bg);
   color: var(--text);
-  font-family: system-ui, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  min-height: 100vh;
 }
 header {
-  padding: 20px;
-  border-bottom: 1px solid #303047;
+  padding: 16px clamp(16px, 4vw, 42px);
+  border-bottom: 1px solid rgba(64, 116, 205, .25);
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
+  background: rgba(4, 10, 25, .92);
 }
-.logo { font-size: 24px; font-weight: 900; }
+.brand { display:flex; align-items:center; gap:10px; min-width:0; }
+.brand-icon {
+  display:grid; place-items:center; width:43px; height:43px; flex:0 0 auto;
+  border-radius:14px; font-size:25px;
+  background:linear-gradient(135deg,var(--cyan),var(--blue),var(--purple));
+  box-shadow:0 0 24px rgba(0,132,255,.25);
+}
+.logo { font-size: clamp(22px, 5vw, 30px); font-weight: 900; letter-spacing:-1px; line-height:1.05; }
 .logo span { color: var(--cyan); }
+.tagline { color:var(--muted); font-size:11px; margin-top:4px; }
 .pill {
-  background: #28213e;
-  padding: 8px 12px;
+  background: #0c2450;
+  border:1px solid #174783;
+  padding: 9px 13px;
   border-radius: 30px;
-  color: #d9c9ff;
+  color: #d6f8ff;
   font-size: 12px;
+  font-weight:800;
+  white-space:nowrap;
 }
-main { max-width: 1000px; margin: auto; padding: 22px 16px; }
+main { max-width: 1120px; margin: auto; padding: 24px 16px 34px; }
 .hero {
-  padding: 30px 22px;
-  border-radius: 22px;
-  background: linear-gradient(135deg, #30215d, #172d4b);
+  position:relative; overflow:hidden;
+  padding: clamp(25px, 5vw, 48px) clamp(20px, 5vw, 42px);
+  border:1px solid #153e83;
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 83% 45%, rgba(0,183,255,.22), transparent 32%),
+    linear-gradient(120deg, #101653 0%, #071b42 58%, #10105b 100%);
+  box-shadow:0 18px 50px rgba(0,0,0,.18);
 }
-.hero h1 { font-size: clamp(28px, 7vw, 46px); margin: 0 0 10px; }
-.hero p { color: #e0def7; line-height: 1.6; }
+.hero:after {
+  content:"🎮"; position:absolute; right:5%; top:50%; transform:translateY(-50%) rotate(-10deg);
+  font-size:clamp(90px, 20vw, 190px); opacity:.16; filter:drop-shadow(0 0 25px #087cff);
+  pointer-events:none;
+}
+.hero-content { position:relative; z-index:1; max-width:680px; }
+.hero-label {
+  display:inline-flex; align-items:center; gap:7px; padding:8px 13px;
+  border-radius:30px; background:linear-gradient(90deg,#086fe8,#263fba);
+  color:white; font-size:12px; font-weight:900; letter-spacing:.4px;
+}
+.hero h1 { font-size:clamp(32px, 7vw, 54px); line-height:1.04; letter-spacing:-1.7px; margin:17px 0 13px; }
+.hero h1 span { color:var(--cyan); }
+.hero p { color:#dce8ff; line-height:1.65; max-width:520px; margin:0; font-size:clamp(15px, 2vw, 18px); }
+.hero-points { display:flex; flex-wrap:wrap; gap:10px 20px; margin-top:23px; color:#e3f2ff; font-size:12px; font-weight:650; }
+.hero-points span { display:flex; align-items:center; gap:7px; }
 .search {
-  width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  border: 1px solid #41415e;
-  background: var(--panel);
-  color: white;
-  font-size: 16px;
-  margin: 18px 0 12px;
+  width: 100%; padding: 15px 16px; border-radius: 14px;
+  border: 1px solid #1c3d70; background: #09162f; color: white;
+  font-size: 16px; margin: 22px 0 13px; outline:none;
 }
+.search:focus { border-color:var(--cyan); box-shadow:0 0 0 3px rgba(22,217,255,.1); }
+.search::placeholder { color:#91a7cd; }
 .filters { display: flex; flex-wrap: wrap; gap: 8px; }
 button {
-  cursor: pointer;
-  border: 0;
-  border-radius: 10px;
-  padding: 11px 15px;
-  font-size: 14px;
-  font-weight: 700;
+  cursor: pointer; border: 0; border-radius: 11px; padding: 11px 15px;
+  font-size: 14px; font-weight: 750; transition:transform .15s, filter .15s, background .15s;
 }
-.filter { background: #292940; color: white; }
-.filter.active { background: var(--purple); }
-h2 { margin-top: 30px; }
-.games {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 15px;
-}
+button:active { transform:scale(.98); }
+button:focus-visible, input:focus-visible { outline:2px solid var(--cyan); outline-offset:3px; }
+.filter { background: #102449; color: #dce9ff; border:1px solid #1a3a6b; }
+.filter.active { background: linear-gradient(100deg,#087cff,#5a38e8); border-color:transparent; color:white; }
+.section-heading { display:flex; align-items:end; justify-content:space-between; gap:12px; margin:30px 0 16px; }
+.section-heading h2 { margin:0; font-size:clamp(22px, 5vw, 30px); letter-spacing:-.6px; }
+.section-heading p { color:var(--muted); margin:5px 0 0; font-size:14px; }
+.section-mark { color:var(--cyan); }
+.games { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .card {
-  background: var(--panel);
-  border: 1px solid #303047;
-  border-radius: 17px;
-  padding: 17px;
+  overflow:hidden; background:linear-gradient(180deg,#0b1b3c,#07132b);
+  border: 1px solid #183b73; border-radius: 19px; padding: 0;
+  box-shadow:0 10px 28px rgba(0,0,0,.14);
+  transition:transform .18s,border-color .18s,box-shadow .18s;
 }
+.card:hover { transform:translateY(-4px); border-color:#168ce8; box-shadow:0 14px 30px rgba(0,110,255,.12); }
 .art {
-  height: 125px;
-  border-radius: 12px;
-  display: grid;
-  place-items: center;
-  font-size: 52px;
-  background: linear-gradient(135deg, #35205b, #154657);
+  height: 150px; display:grid; place-items:center; position:relative; overflow:hidden;
+  font-size: clamp(54px, 8vw, 78px);
 }
-.card h3 { margin-bottom: 5px; }
-.card p { color: var(--muted); font-size: 14px; min-height: 40px; }
+.card:nth-child(1) .art { background:radial-gradient(circle at 50% 45%,#b957ff,#5623c4 65%,#20115c); }
+.card:nth-child(2) .art { background:radial-gradient(circle at 50% 45%,#55ff56,#079a63 52%,#064b46); }
+.card:nth-child(3) .art { background:radial-gradient(circle at 50% 45%,#23baff,#1648d7 58%,#15166b); }
+.art:after { content:""; position:absolute; inset:10px; border:1px solid rgba(255,255,255,.12); border-radius:13px; pointer-events:none; }
+.card-content { padding:16px; }
+.card h3 { margin:0 0 7px; font-size:18px; letter-spacing:-.3px; }
+.card p { color:var(--muted); font-size:14px; line-height:1.5; min-height:42px; margin:0 0 15px; }
 .play {
-  width: 100%;
-  background: var(--purple);
-  color: white;
+  width:100%; background:linear-gradient(100deg,#087cff,#0868e8);
+  color:white; padding:13px 15px; border-radius:30px; font-size:15px;
+  box-shadow:0 5px 16px rgba(0,124,255,.2);
 }
-.play:hover { background: #7543e8; }
+.play:hover { filter:brightness(1.12); }
 #game {
-  margin-top: 22px;
-  background: var(--panel);
-  border: 1px solid #393953;
-  border-radius: 17px;
-  padding: 20px;
-  text-align: center;
-  scroll-margin-top: 12px;
+  margin-top: 24px; background:linear-gradient(145deg,#0b1b3c,#08132b);
+  border: 1px solid #204681; border-radius: 20px; padding: clamp(16px,4vw,25px);
+  text-align: center; scroll-margin-top: 12px;
 }
+#game h2 { margin-top:0; }
 #game button { margin: 5px; }
 .game-input {
-  padding: 12px;
-  width: 100px;
-  border-radius: 8px;
-  font-size: 18px;
+  padding: 12px; width: 110px; border-radius: 9px; font-size: 18px;
+  border:1px solid #2d4f82; background:#061027; color:white;
 }
 #result { color: var(--cyan); font-weight: bold; }
 .hidden { display: none !important; }
+.bottom-banner {
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  padding:17px 20px; margin-top:25px; border-radius:18px;
+  border:1px solid #1b3e75; background:linear-gradient(100deg,#071a3a,#0b1e42);
+}
+.bottom-banner strong { display:block; font-size:16px; }
+.bottom-banner p { color:var(--muted); margin:4px 0 0; font-size:13px; }
+.bottom-banner .rocket { font-size:29px; }
 footer {
-  padding: 30px 15px;
-  text-align: center;
-  color: var(--muted);
-  font-size: 13px;
+  padding: 25px 15px; text-align: center; color: var(--muted); font-size: 13px;
+  border-top:1px solid rgba(64,116,205,.2);
+}
+footer strong { color:#e8f4ff; }
+@media (max-width:720px) {
+  header { padding:14px 15px; }
+  .brand-icon { width:38px; height:38px; border-radius:12px; font-size:22px; }
+  .tagline { display:none; }
+  .pill { font-size:10px; padding:8px 10px; }
+  main { padding:17px 13px 26px; }
+  .hero { border-radius:20px; }
+  .hero:after { right:-10px; top:auto; bottom:-20px; transform:none; font-size:110px; opacity:.11; }
+  .hero-points { gap:9px 13px; }
+  .games { grid-template-columns:1fr; gap:13px; }
+  .card { display:grid; grid-template-columns:105px minmax(0,1fr); align-items:stretch; }
+  .art { height:100%; min-height:175px; font-size:46px; }
+  .art:after { inset:7px; }
+  .card-content { padding:14px 12px; }
+  .card h3 { font-size:16px; }
+  .card p { min-height:0; font-size:13px; margin-bottom:12px; }
+  .play { padding:11px 10px; font-size:14px; }
+  .section-heading { align-items:start; }
+  .section-heading p { font-size:12px; }
+  .bottom-banner { padding:15px; }
+  .bottom-banner p { line-height:1.45; }
+}
+@media (max-width:360px) {
+  .logo { font-size:20px; }
+  .pill { font-size:9px; }
+  .card { grid-template-columns:88px minmax(0,1fr); }
+  .art { min-height:185px; font-size:40px; }
+  .card-content { padding:12px 10px; }
 }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">Play<span>Nexo</span></div>
-  <div class="pill">🎮 JOGUE GRÁTIS</div>
+  <div class="brand">
+    <div class="brand-icon" aria-hidden="true">🎮</div>
+    <div>
+      <div class="logo">Play<span>Nexo</span></div>
+      <div class="tagline">Jogos online. Diversão sem limites!</div>
+    </div>
+  </div>
+  <div class="pill">⚡ JOGUE GRÁTIS</div>
 </header>
 
 <main>
   <section class="hero">
-    <h1>Seu próximo jogo começa aqui.</h1>
-    <p>Desafie sua mente, teste seus reflexos
-    e divirta-se. Tudo direto no navegador!</p>
+    <div class="hero-content">
+      <div class="hero-label">⚡ JOGUE AGORA</div>
+      <h1>Bem-vindo ao<br><span>PlayNexo!</span></h1>
+      <p>Seu portal de jogos online, com diversão gratuita e acessível no celular e no computador. Escolha seu desafio e comece a jogar!</p>
+      <div class="hero-points">
+        <span>⚡ Grátis</span>
+        <span>📱 No celular e computador</span>
+        <span>🛡️ Sem downloads</span>
+      </div>
+    </div>
   </section>
 
   <input id="search" class="search"
     placeholder="🔎 Procurar um jogo..."
     aria-label="Procurar um jogo">
 
-  <div class="filters">
-    <button class="filter active" data-cat="todos">Todos</button>
-    <button class="filter" data-cat="memoria">Memória</button>
-    <button class="filter" data-cat="reflexo">Reflexo</button>
-    <button class="filter" data-cat="logica">Lógica</button>
+  <div class="filters" aria-label="Filtrar jogos">
+    <button class="filter active" data-cat="todos">Todos os jogos</button>
+    <button class="filter" data-cat="memoria">🧠 Memória</button>
+    <button class="filter" data-cat="reflexo">⚡ Reflexo</button>
+    <button class="filter" data-cat="logica">🔢 Lógica</button>
   </div>
 
-  <h2>🔥 Jogos para você</h2>
+  <div class="section-heading">
+    <div>
+      <h2><span class="section-mark">✦</span> Jogos em destaque</h2>
+      <p>Escolha seu favorito e comece a diversão!</p>
+    </div>
+  </div>
 
   <section class="games">
-    <article class="card" data-cat="memoria"
-      data-name="jogo da memoria">
-      <div class="art">🧠</div>
-      <h3>Jogo da Memória</h3>
-      <p>Encontre todos os pares de emojis.</p>
-      <button class="play" onclick="openGame('memoria')">
-        Jogar agora
-      </button>
+    <article class="card" data-cat="memoria" data-name="jogo da memoria">
+      <div class="art" aria-hidden="true">🧠</div>
+      <div class="card-content">
+        <h3>Jogo da Memória</h3>
+        <p>Encontre todos os pares de emojis.</p>
+        <button class="play" onclick="openGame('memoria')">▶ Jogar</button>
+      </div>
     </article>
 
-    <article class="card" data-cat="reflexo"
-      data-name="teste de reflexo">
-      <div class="art">⚡</div>
-      <h3>Teste de Reflexo</h3>
-      <p>Espere o sinal verde e teste sua velocidade.</p>
-      <button class="play" onclick="openGame('reflexo')">
-        Jogar agora
-      </button>
+    <article class="card" data-cat="reflexo" data-name="teste de reflexo">
+      <div class="art" aria-hidden="true">⚡</div>
+      <div class="card-content">
+        <h3>Teste de Reflexo</h3>
+        <p>Espere o sinal verde e teste sua velocidade.</p>
+        <button class="play" onclick="openGame('reflexo')">▶ Jogar</button>
+      </div>
     </article>
 
-    <article class="card" data-cat="logica"
-      data-name="adivinhe o numero">
-      <div class="art">🔢</div>
-      <h3>Adivinhe o Número</h3>
-      <p>Descubra o número secreto entre 1 e 100.</p>
-      <button class="play" onclick="openGame('numero')">
-        Jogar agora
-      </button>
+    <article class="card" data-cat="logica" data-name="adivinhe o numero">
+      <div class="art" aria-hidden="true">🔢</div>
+      <div class="card-content">
+        <h3>Adivinhe o Número</h3>
+        <p>Descubra o número secreto entre 1 e 100.</p>
+        <button class="play" onclick="openGame('numero')">▶ Jogar</button>
+      </div>
     </article>
   </section>
 
@@ -185,14 +264,23 @@ footer {
     <h2 id="gameTitle">Seu jogo</h2>
     <div id="gameBody"></div>
     <p id="result" aria-live="polite"></p>
-    <button class="filter" onclick="closeGame()">
-      ✕ Fechar jogo
-    </button>
+    <button class="filter" onclick="closeGame()">✕ Fechar jogo</button>
+  </section>
+
+  <section class="bottom-banner">
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="rocket" aria-hidden="true">🚀</span>
+      <div>
+        <strong>Mais jogos chegando!</strong>
+        <p>Estamos preparando novas aventuras para você.</p>
+      </div>
+    </div>
+    <div class="pill">Fique ligado ✨</div>
   </section>
 </main>
 
 <footer>
-  PlayNexo © 2026 · Seu portal de jogos online
+  <strong>🎮 PlayNexo</strong> · © 2026 · Seu portal de jogos online
 </footer>
 
 <script>
@@ -243,7 +331,7 @@ function openGame(type) {
       const b = document.createElement("button");
       b.textContent = "❔";
       b.style.cssText =
-        "font-size:26px;min-height:58px;background:#30234d;color:white";
+        "font-size:26px;min-height:58px;background:#102f64;color:white";
       b.setAttribute("aria-label", "Carta " + (i + 1));
       b.onclick = () => {
         if (locked || b.dataset.open || b.dataset.done) return;
@@ -275,6 +363,7 @@ function openGame(type) {
       grid.appendChild(b);
     });
     body.appendChild(grid);
+    $("game").scrollIntoView({behavior:"smooth", block:"start"});
     return;
   }
 
@@ -305,6 +394,7 @@ function openGame(type) {
     $("guess").addEventListener("keydown", e => {
       if (e.key === "Enter") $("guessBtn").click();
     });
+    $("game").scrollIntoView({behavior:"smooth", block:"start"});
     return;
   }
 
@@ -345,6 +435,7 @@ function openGame(type) {
       $("result").textContent = elapsed + " milissegundos!";
     }
   };
+  $("game").scrollIntoView({behavior:"smooth", block:"start"});
 }
 
 function closeGame(hide = true) {
@@ -359,5 +450,4 @@ function closeGame(hide = true) {
 }
 </script>
 </body>
-        </html>
-        
+</html>
