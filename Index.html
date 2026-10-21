@@ -1,0 +1,362 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101020">
+<title>PlayNexo — Jogos Online</title>
+<style>
+:root {
+  --bg: #101020;
+  --panel: #1b1b30;
+  --purple: #8b5cf6;
+  --cyan: #22d3ee;
+  --text: #f5f5ff;
+  --muted: #b3b3ca;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, sans-serif;
+}
+header {
+  padding: 20px;
+  border-bottom: 1px solid #303047;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.logo { font-size: 24px; font-weight: 900; }
+.logo span { color: var(--cyan); }
+.pill {
+  background: #28213e;
+  padding: 8px 12px;
+  border-radius: 30px;
+  color: #d9c9ff;
+  font-size: 12px;
+}
+main { max-width: 1000px; margin: auto; padding: 22px 16px; }
+.hero {
+  padding: 30px 22px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #30215d, #172d4b);
+}
+.hero h1 { font-size: clamp(28px, 7vw, 46px); margin: 0 0 10px; }
+.hero p { color: #e0def7; line-height: 1.6; }
+.search {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #41415e;
+  background: var(--panel);
+  color: white;
+  font-size: 16px;
+  margin: 18px 0 12px;
+}
+.filters { display: flex; flex-wrap: wrap; gap: 8px; }
+button {
+  cursor: pointer;
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 15px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.filter { background: #292940; color: white; }
+.filter.active { background: var(--purple); }
+h2 { margin-top: 30px; }
+.games {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid #303047;
+  border-radius: 17px;
+  padding: 17px;
+}
+.art {
+  height: 125px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 52px;
+  background: linear-gradient(135deg, #35205b, #154657);
+}
+.card h3 { margin-bottom: 5px; }
+.card p { color: var(--muted); font-size: 14px; min-height: 40px; }
+.play {
+  width: 100%;
+  background: var(--purple);
+  color: white;
+}
+.play:hover { background: #7543e8; }
+#game {
+  margin-top: 22px;
+  background: var(--panel);
+  border: 1px solid #393953;
+  border-radius: 17px;
+  padding: 20px;
+  text-align: center;
+  scroll-margin-top: 12px;
+}
+#game button { margin: 5px; }
+.game-input {
+  padding: 12px;
+  width: 100px;
+  border-radius: 8px;
+  font-size: 18px;
+}
+#result { color: var(--cyan); font-weight: bold; }
+.hidden { display: none !important; }
+footer {
+  padding: 30px 15px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Play<span>Nexo</span></div>
+  <div class="pill">🎮 JOGUE GRÁTIS</div>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>Seu próximo jogo começa aqui.</h1>
+    <p>Desafie sua mente, teste seus reflexos
+    e divirta-se. Tudo direto no navegador!</p>
+  </section>
+
+  <input id="search" class="search"
+    placeholder="🔎 Procurar um jogo..."
+    aria-label="Procurar um jogo">
+
+  <div class="filters">
+    <button class="filter active" data-cat="todos">Todos</button>
+    <button class="filter" data-cat="memoria">Memória</button>
+    <button class="filter" data-cat="reflexo">Reflexo</button>
+    <button class="filter" data-cat="logica">Lógica</button>
+  </div>
+
+  <h2>🔥 Jogos para você</h2>
+
+  <section class="games">
+    <article class="card" data-cat="memoria"
+      data-name="jogo da memoria">
+      <div class="art">🧠</div>
+      <h3>Jogo da Memória</h3>
+      <p>Encontre todos os pares de emojis.</p>
+      <button class="play" onclick="openGame('memoria')">
+        Jogar agora
+      </button>
+    </article>
+
+    <article class="card" data-cat="reflexo"
+      data-name="teste de reflexo">
+      <div class="art">⚡</div>
+      <h3>Teste de Reflexo</h3>
+      <p>Espere o sinal verde e teste sua velocidade.</p>
+      <button class="play" onclick="openGame('reflexo')">
+        Jogar agora
+      </button>
+    </article>
+
+    <article class="card" data-cat="logica"
+      data-name="adivinhe o numero">
+      <div class="art">🔢</div>
+      <h3>Adivinhe o Número</h3>
+      <p>Descubra o número secreto entre 1 e 100.</p>
+      <button class="play" onclick="openGame('numero')">
+        Jogar agora
+      </button>
+    </article>
+  </section>
+
+  <section id="game" class="hidden">
+    <h2 id="gameTitle">Seu jogo</h2>
+    <div id="gameBody"></div>
+    <p id="result" aria-live="polite"></p>
+    <button class="filter" onclick="closeGame()">
+      ✕ Fechar jogo
+    </button>
+  </section>
+</main>
+
+<footer>
+  PlayNexo © 2026 · Seu portal de jogos online
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+let category = "todos";
+let secret = 0, attempts = 0;
+let cards = [], first = null, locked = false, matches = 0;
+let reactionTimer = null, startedAt = 0, waiting = false;
+let round = 0;
+
+function filterGames() {
+  const q = $("search").value.toLowerCase().trim();
+  document.querySelectorAll(".card").forEach(card => {
+    const matchesText = card.dataset.name.includes(q) ||
+      card.innerText.toLowerCase().includes(q);
+    const matchesCat = category === "todos" ||
+      card.dataset.cat === category;
+    card.classList.toggle("hidden", !(matchesText && matchesCat));
+  });
+}
+$("search").addEventListener("input", filterGames);
+document.querySelectorAll(".filter[data-cat]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    category = btn.dataset.cat;
+    document.querySelectorAll(".filter[data-cat]")
+      .forEach(b => b.classList.toggle("active", b === btn));
+    filterGames();
+  });
+});
+
+function openGame(type) {
+  closeGame(false);
+  $("game").classList.remove("hidden");
+  $("result").textContent = "";
+  const body = $("gameBody");
+  body.innerHTML = "";
+
+  if (type === "memoria") {
+    $("gameTitle").textContent = "🧠 Jogo da Memória";
+    cards = ["🍉","🚀","🐱","⚽","🌟","🍕",
+             "🍉","🚀","🐱","⚽","🌟","🍕"]
+             .sort(() => Math.random() - 0.5);
+    first = null; locked = false; matches = 0;
+    const grid = document.createElement("div");
+    grid.style.cssText =
+      "display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:340px;margin:20px auto";
+    cards.forEach((emoji, i) => {
+      const b = document.createElement("button");
+      b.textContent = "❔";
+      b.style.cssText =
+        "font-size:26px;min-height:58px;background:#30234d;color:white";
+      b.setAttribute("aria-label", "Carta " + (i + 1));
+      b.onclick = () => {
+        if (locked || b.dataset.open || b.dataset.done) return;
+        b.textContent = emoji;
+        b.dataset.open = "1";
+        if (!first) { first = b; return; }
+        if (first.textContent === b.textContent) {
+          first.dataset.done = "1";
+          b.dataset.done = "1";
+          delete first.dataset.open;
+          delete b.dataset.open;
+          first = null;
+          matches++;
+          if (matches === 6) $("result").textContent =
+            "🏆 Você encontrou todos os pares!";
+        } else {
+          locked = true;
+          const previous = first;
+          first = null;
+          setTimeout(() => {
+            previous.textContent = "❔";
+            b.textContent = "❔";
+            delete previous.dataset.open;
+            delete b.dataset.open;
+            locked = false;
+          }, 750);
+        }
+      };
+      grid.appendChild(b);
+    });
+    body.appendChild(grid);
+    return;
+  }
+
+  if (type === "numero") {
+    $("gameTitle").textContent = "🔢 Adivinhe o Número";
+    secret = Math.floor(Math.random() * 100) + 1;
+    attempts = 0;
+    body.innerHTML =
+      '<p>Escolhi um número entre 1 e 100.</p>' +
+      '<input id="guess" class="game-input" type="number" min="1" max="100" placeholder="1–100">' +
+      '<button class="play" id="guessBtn">Tentar</button>';
+    $("guessBtn").onclick = () => {
+      const n = Number($("guess").value);
+      if (!Number.isInteger(n) || n < 1 || n > 100) {
+        $("result").textContent = "Digite um número válido!";
+        return;
+      }
+      attempts++;
+      if (n === secret) {
+        $("result").textContent =
+          "🎉 Acertou em " + attempts + " tentativa(s)!";
+      } else {
+        $("result").textContent =
+          n < secret ? "⬆️ Tente um número maior!" :
+                       "⬇️ Tente um número menor!";
+      }
+    };
+    $("guess").addEventListener("keydown", e => {
+      if (e.key === "Enter") $("guessBtn").click();
+    });
+    return;
+  }
+
+  $("gameTitle").textContent = "⚡ Teste de Reflexo";
+  body.innerHTML =
+    '<p id="reactionMsg">Toque para iniciar. Aguarde o verde!</p>' +
+    '<button id="reactionBtn" style="background:#7044d8;color:white;font-size:18px;min-height:100px;width:100%">INICIAR</button>';
+  const btn = $("reactionBtn");
+  btn.onclick = () => {
+    if (!waiting && !startedAt) {
+      waiting = true;
+      btn.textContent = "AGUARDE...";
+      btn.style.background = "#b45309";
+      $("reactionMsg").textContent = "Não toque ainda!";
+      round++;
+      const thisRound = round;
+      reactionTimer = setTimeout(() => {
+        if (thisRound !== round) return;
+        waiting = false;
+        startedAt = Date.now();
+        btn.style.background = "#16a34a";
+        btn.textContent = "TOQUE AGORA!";
+        $("reactionMsg").textContent = "AGORA!";
+      }, 1500 + Math.random() * 2500);
+    } else if (waiting) {
+      clearTimeout(reactionTimer);
+      round++;
+      waiting = false;
+      btn.style.background = "#7044d8";
+      btn.textContent = "TENTAR NOVAMENTE";
+      $("reactionMsg").textContent = "Cedo demais! Tente de novo.";
+    } else if (startedAt) {
+      const elapsed = Date.now() - startedAt;
+      startedAt = 0;
+      btn.style.background = "#7044d8";
+      btn.textContent = "JOGAR DE NOVO";
+      $("reactionMsg").textContent = "Sua velocidade:";
+      $("result").textContent = elapsed + " milissegundos!";
+    }
+  };
+}
+
+function closeGame(hide = true) {
+  clearTimeout(reactionTimer);
+  round++;
+  waiting = false;
+  startedAt = 0;
+  locked = false;
+  if (hide) $("game").classList.add("hidden");
+  $("gameBody").innerHTML = "";
+  $("result").textContent = "";
+}
+</script>
+</body>
+</html>
